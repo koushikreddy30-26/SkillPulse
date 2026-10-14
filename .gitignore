@@ -24,3 +24,6 @@ frontend/dist/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Local pre-PostgreSQL backups
+*.pre-postgres.bak

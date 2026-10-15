@@ -6,6 +6,8 @@ import re
 import joblib
 
 import pandas as pd
+import json
+from pathlib import Path
 import threading
 from flask import Flask, jsonify, request
 
@@ -1203,7 +1205,31 @@ def get_idp_progress(plan_key):
         "completedSkills": completed
     }), 200
 
+
 progress_lock = threading.Lock()
+IDP_PROGRESS_FILE = Path(__file__).resolve().parent / "idp_progress.json"
+
+
+def read_idp_progress():
+    """Read saved IDP progress from the JSON file."""
+    if not IDP_PROGRESS_FILE.exists():
+        return {}
+
+    try:
+        with IDP_PROGRESS_FILE.open("r", encoding="utf-8") as file:
+            data = json.load(file)
+            return data if isinstance(data, dict) else {}
+    except (json.JSONDecodeError, OSError):
+        app.logger.exception("Could not read IDP progress file")
+        return {}
+
+
+def write_idp_progress(progress):
+    """Write IDP progress to the JSON file."""
+    with IDP_PROGRESS_FILE.open("w", encoding="utf-8") as file:
+        json.dump(progress, file, ensure_ascii=False, indent=2)
+
+
 
 
 @app.route("/api/idp-progress", methods=["POST"])
@@ -1232,14 +1258,9 @@ def save_idp_progress():
     with progress_lock:
         progress = read_idp_progress()
         progress[user_plan_key] = completed
-        temporary_file = PROGRESS_FILE + ".tmp"
 
         try:
-            with open(temporary_file, "w", encoding="utf-8") as file:
-                json.dump(progress, file, indent=2)
-
-            os.replace(temporary_file, PROGRESS_FILE)
-
+            write_idp_progress(progress)
         except OSError:
             app.logger.exception("Could not save IDP progress")
             return jsonify({"error": "Could not save progress"}), 500
@@ -1247,8 +1268,10 @@ def save_idp_progress():
     return jsonify({
         "message": "IDP progress saved",
         "plan_key": plan_key,
-        "completed_skills": completed
+        "completed_skills": completed,
+        "completedSkills": completed
     }), 200
+
 
 
 

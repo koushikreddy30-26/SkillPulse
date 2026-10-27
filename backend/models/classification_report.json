@@ -1,0 +1,177 @@
+{
+  "APIs": {
+    "precision": 0.15384615384615385,
+    "recall": 0.6666666666666666,
+    "f1-score": 0.25,
+    "support": 3.0
+  },
+  "AWS": {
+    "precision": 0.25,
+    "recall": 0.6666666666666666,
+    "f1-score": 0.36363636363636365,
+    "support": 3.0
+  },
+  "CSS": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 3.0
+  },
+  "Communication": {
+    "precision": 0.3333333333333333,
+    "recall": 0.3333333333333333,
+    "f1-score": 0.3333333333333333,
+    "support": 3.0
+  },
+  "Cryptography": {
+    "precision": 0.5,
+    "recall": 0.3333333333333333,
+    "f1-score": 0.4,
+    "support": 3.0
+  },
+  "Data Visualization": {
+    "precision": 0.36363636363636365,
+    "recall": 0.8,
+    "f1-score": 0.5,
+    "support": 5.0
+  },
+  "Databases": {
+    "precision": 0.3333333333333333,
+    "recall": 0.3333333333333333,
+    "f1-score": 0.3333333333333333,
+    "support": 3.0
+  },
+  "Deep Learning": {
+    "precision": 0.5,
+    "recall": 0.375,
+    "f1-score": 0.42857142857142855,
+    "support": 8.0
+  },
+  "Docker": {
+    "precision": 0.4,
+    "recall": 0.6666666666666666,
+    "f1-score": 0.5,
+    "support": 3.0
+  },
+  "Excel": {
+    "precision": 0.36363636363636365,
+    "recall": 0.8,
+    "f1-score": 0.5,
+    "support": 5.0
+  },
+  "HTML": {
+    "precision": 0.25,
+    "recall": 0.3333333333333333,
+    "f1-score": 0.2857142857142857,
+    "support": 3.0
+  },
+  "Java": {
+    "precision": 0.3333333333333333,
+    "recall": 0.3333333333333333,
+    "f1-score": 0.3333333333333333,
+    "support": 3.0
+  },
+  "JavaScript": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 3.0
+  },
+  "Kubernetes": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 3.0
+  },
+  "Linux": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 5.0
+  },
+  "MLOps": {
+    "precision": 0.2727272727272727,
+    "recall": 1.0,
+    "f1-score": 0.42857142857142855,
+    "support": 3.0
+  },
+  "Machine Learning": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 11.0
+  },
+  "NLP": {
+    "precision": 0.25,
+    "recall": 0.2,
+    "f1-score": 0.2222222222222222,
+    "support": 5.0
+  },
+  "Networking": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 6.0
+  },
+  "Power BI": {
+    "precision": 0.2857142857142857,
+    "recall": 0.6666666666666666,
+    "f1-score": 0.4,
+    "support": 3.0
+  },
+  "Python": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 19.0
+  },
+  "React": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 3.0
+  },
+  "SIEM": {
+    "precision": 0.2222222222222222,
+    "recall": 0.6666666666666666,
+    "f1-score": 0.3333333333333333,
+    "support": 3.0
+  },
+  "SQL": {
+    "precision": 1.0,
+    "recall": 0.058823529411764705,
+    "f1-score": 0.1111111111111111,
+    "support": 17.0
+  },
+  "Statistics": {
+    "precision": 0.2857142857142857,
+    "recall": 0.25,
+    "f1-score": 0.26666666666666666,
+    "support": 8.0
+  },
+  "TensorFlow": {
+    "precision": 0.3333333333333333,
+    "recall": 1.0,
+    "f1-score": 0.5,
+    "support": 3.0
+  },
+  "Transformers": {
+    "precision": 0.3,
+    "recall": 1.0,
+    "f1-score": 0.46153846153846156,
+    "support": 3.0
+  },
+  "accuracy": 0.2785714285714286,
+  "macro avg": {
+    "precision": 0.24929001040112148,
+    "recall": 0.3882897603485838,
+    "f1-score": 0.2574579741246408,
+    "support": 140.0
+  },
+  "weighted avg": {
+    "precision": 0.28625434089719803,
+    "recall": 0.2785714285714286,
+    "f1-score": 0.20235918843061698,
+    "support": 140.0
+  }
+}

@@ -1,0 +1,16 @@
+
+PROJECT: SkillPulse
+EVALUATION: Learning Goal Classification
+
+Dataset size: 5000 rows
+Held-out test samples: 1000
+Held-out accuracy: 100.00%
+Macro F1-score: 1.00
+Exact text-extraction accuracy: 92.60%
+
+IMPORTANT LIMITATION:
+The learning_goal field contains the target skill.
+Therefore, the model may learn to identify a label already present
+in its input. The 100% result does not demonstrate generalization
+to genuinely unknown skills or prove 100% accuracy for the
+career-goal-based classifier.

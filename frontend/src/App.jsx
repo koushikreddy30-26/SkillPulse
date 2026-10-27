@@ -52,13 +52,23 @@ function SkillPulseApp({ user, onLogout }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  
+const [learningGoal, setLearningGoal] = useState("");
+const [learningGoalPrediction, setLearningGoalPrediction] = useState("");
+const [learningGoalLoading, setLearningGoalLoading] = useState(false);
+const [learningGoalError, setLearningGoalError] = useState("");
+const [skillRecommendations, setSkillRecommendations] = useState([]);
+const [skillRecommendationLoading, setSkillRecommendationLoading] = useState(false);
+const [skillRecommendationError, setSkillRecommendationError] = useState("");
 
   const menu = [
-    { name: "Dashboard", icon: LayoutDashboard },
-    { name: "Skill Analysis", icon: Target },
-    { name: "Recommendations", icon: BookOpen },
-    { name: "My IDP", icon: Route },
-  ];
+  { name: "Dashboard", icon: LayoutDashboard },
+  { name: "Skill Analysis", icon: Target },
+  { name: "Learning Goal Prediction", icon: BrainCircuit },
+  { name: "Recommendations", icon: BookOpen },
+  { name: "My IDP", icon: Route },
+];
+
 
   useEffect(() => {
     let cancelled = false;
@@ -171,6 +181,144 @@ function SkillPulseApp({ user, onLogout }) {
 
     return data;
   }
+  
+async function getPredictedSkillRecommendations() {
+  const targetSkill = learningGoalPrediction.trim();
+
+  if (!targetSkill) {
+    setSkillRecommendationError("Please predict a target skill first.");
+    return;
+  }
+
+  setSkillRecommendationLoading(true);
+  setSkillRecommendationError("");
+  setSkillRecommendations([]);
+  setError("");
+  setSuccess("");
+
+  try {
+    const data = await postData("/api/recommend-courses", {
+      target_skill: targetSkill,
+      top_k: 5,
+    });
+
+    setSkillRecommendations(
+      Array.isArray(data.recommendations) ? data.recommendations : []
+    );
+
+    if (!data.recommendations?.length) {
+      setSkillRecommendationError(
+        `No matching courses were found for ${targetSkill}.`
+      );
+    }
+  } catch (err) {
+    setSkillRecommendationError(
+      `Could not load recommendations: ${err.message}`
+    );
+  } finally {
+    setSkillRecommendationLoading(false);
+  }
+}
+
+async function predictLearningGoal(event) {
+  event.preventDefault();
+
+  if (!learningGoal.trim()) {
+    setLearningGoalError("Please enter a learning goal.");
+    return;
+  }
+
+  setLearningGoalLoading(true);
+  setLearningGoalError("");
+  setLearningGoalPrediction("");
+  setError("");
+  setSuccess("");
+
+  try {
+    const data = await postData(
+      "/api/predict-from-learning-goal",
+      { learning_goal: learningGoal.trim() }
+    );
+
+    const skill = String(
+      data.predicted_target_skill || ""
+    ).trim();
+
+    if (!skill) {
+      throw new Error("The model did not return a target skill.");
+    }
+
+    setLearningGoalPrediction(skill);
+    setPredictedSkill(skill);
+  } catch (err) {
+    setLearningGoalError(`Prediction failed: ${err.message}`);
+  } finally {
+    setLearningGoalLoading(false);
+  }
+}
+
+function addPredictedSkillToIDP() {
+  const skill = learningGoalPrediction.trim();
+
+  if (!skill || skillRecommendations.length === 0) {
+    setSkillRecommendationError(
+      "Predict a skill and load its courses first."
+    );
+    return;
+  }
+
+  if (!personalizedIDP || !analysis) {
+    setSkillRecommendationError(
+      "Please run Skill Analysis first to create your IDP."
+    );
+    setPage("Skill Analysis");
+    return;
+  }
+
+  const existingRoadmap = personalizedIDP.idp_roadmap || [];
+
+  if (
+    existingRoadmap.some(
+      (step) => step.skill?.toLowerCase() === skill.toLowerCase()
+    )
+  ) {
+    setSkillRecommendationError(`${skill} is already in your IDP.`);
+    return;
+  }
+
+  const newPhase = {
+    skill,
+    milestone: `Learn ${skill}`,
+    learning_objective: `Develop practical skills in ${skill} using the recommended courses.`,
+    duration_weeks: 1,
+    recommended_courses: skillRecommendations,
+  };
+
+  const updatedIDP = {
+    ...personalizedIDP,
+    idp_roadmap: [...existingRoadmap, newPhase],
+    skill_gaps: [...(personalizedIDP.skill_gaps || []), skill],
+    course_recommendations: {
+      ...(personalizedIDP.course_recommendations || {}),
+      [skill]: skillRecommendations,
+    },
+  };
+
+  setPersonalizedIDP(updatedIDP);
+  setRoadmap(updatedIDP.idp_roadmap);
+
+  setSkillGaps((previous) =>
+    previous.some(
+      (item) => item.toLowerCase() === skill.toLowerCase()
+    )
+      ? previous
+      : [...previous, skill]
+  );
+
+  setSkillRecommendationError("");
+  setSuccess(`${skill} and its courses were added to your IDP.`);
+  setPage("My IDP");
+}
 
   async function analyzeSkills(event) {
     if (event) event.preventDefault();
@@ -534,6 +682,142 @@ function SkillPulseApp({ user, onLogout }) {
             )}
           </section>
         )}
+        {page === "Learning Goal Prediction" && (
+  <section className="content-card">
+    <div className="card-heading">
+      <div className="large-icon">
+        <BrainCircuit size={24} />
+      </div>
+
+      <div>
+        <h2>Learning Goal Prediction</h2>
+        <p>
+          Enter a learning goal to identify the target skill
+          recognized by the trained model.
+        </p>
+      </div>
+    </div>
+
+    <form
+      className="analysis-form"
+      onSubmit={predictLearningGoal}
+    >
+      <label htmlFor="learning-goal">
+        Your learning goal
+      </label>
+
+      <textarea
+        id="learning-goal"
+        value={learningGoal}
+        onChange={(event) =>
+          setLearningGoal(event.target.value)
+        }
+        placeholder="Example: Develop Python for Data Scientist"
+        required
+      />
+
+      <span className="field-help">
+        Describe the skill you want to develop.
+      </span>
+
+      {learningGoalError && (
+        <ErrorMessage message={learningGoalError} />
+      )}
+
+      <button
+        type="submit"
+        className="primary-btn full-btn"
+        disabled={learningGoalLoading}
+      >
+        {learningGoalLoading ? (
+          <LoaderCircle className="spin" size={18} />
+        ) : (
+          <Sparkles size={18} />
+        )}
+
+        {learningGoalLoading
+          ? "Predicting..."
+          : "Predict target skill"}
+      </button>
+    </form>
+
+    {learningGoalPrediction && (
+      <div className="analysis-results">
+        <h3>Predicted target skill</h3>
+
+        <div className="tag-row">
+          <span className="course-tag">
+            {learningGoalPrediction}
+          </span>
+        </div>
+
+        <p className="field-help">
+          The model uses the learning-goal text to produce
+          this result. The result is not a guarantee of
+          accurate prediction for unknown skills.
+        </p>
+        
+
+      
+        <button
+          type="button"
+          className="primary-btn"
+          disabled={skillRecommendationLoading}
+          onClick={getPredictedSkillRecommendations}
+        >
+          {skillRecommendationLoading
+            ? "Finding courses..."
+            : "Get Courses for Predicted Skill"}
+          <ArrowRight size={17} />
+        </button>
+
+        {skillRecommendationError && (
+          <ErrorMessage message={skillRecommendationError} />
+        )}
+
+        {skillRecommendations.length > 0 && (
+          <div className="analysis-results">
+            <h3>Courses for {learningGoalPrediction}</h3>
+            {skillRecommendations.map((course, index) => (
+              <article
+                className="recommendation-item"
+                key={course.resource_id || course.title || index}
+              >
+                <div className="course-number">
+                  {String(index + 1).padStart(2, "0")}
+                </div>
+                <div className="course-details">
+                  <h3>{course.title || "Recommended course"}</h3>
+                  <p>{course.description || "Recommended learning resource"}</p>
+                  <div className="tag-row">
+                    {course.topic && <span className="course-tag">{course.topic}</span>}
+                    {course.difficulty && <span className="course-tag">{course.difficulty}</span>}
+                    {course.content_type && <span className="course-tag">{course.content_type}</span>}
+                  </div>
+                </div>
+                {course.match_score !== undefined && (
+                  <span className="similarity">
+                    {Math.round(Number(course.match_score) * 100)}% match
+                  </span>
+                )}
+              </article>
+            ))}
+            <button
+              type="button"
+              className="primary-btn"
+              onClick={addPredictedSkillToIDP}
+            >
+              Add Predicted Skill to My IDP
+              <ArrowRight size={17} />
+            </button>
+          </div>
+        )}
+      </div>
+      
+    )}
+
+  </section>
+)}
 
         {page === "Recommendations" && (
           <section className="content-card">

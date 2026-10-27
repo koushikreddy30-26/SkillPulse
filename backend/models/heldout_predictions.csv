@@ -1,0 +1,141 @@
+actual,predicted
+Databases,APIs
+Linux,SIEM
+Networking,SIEM
+Python,SIEM
+Python,NLP
+NLP,Transformers
+Deep Learning,Deep Learning
+Linux,AWS
+Excel,Excel
+Cryptography,Cryptography
+Power BI,Power BI
+Machine Learning,Transformers
+Machine Learning,NLP
+Java,APIs
+Python,Statistics
+Deep Learning,TensorFlow
+Deep Learning,NLP
+Machine Learning,Data Visualization
+Statistics,Excel
+AWS,Docker
+Deep Learning,MLOps
+Networking,SIEM
+HTML,JavaScript
+TensorFlow,TensorFlow
+Cryptography,SIEM
+Transformers,Transformers
+Machine Learning,MLOps
+Transformers,Transformers
+HTML,CSS
+Python,Transformers
+Python,TensorFlow
+NLP,NLP
+Deep Learning,MLOps
+Statistics,Statistics
+React,HTML
+Networking,Docker
+Linux,AWS
+Java,Java
+Python,TensorFlow
+MLOps,MLOps
+SIEM,SIEM
+Statistics,Excel
+Data Visualization,Data Visualization
+Deep Learning,MLOps
+SQL,CSS
+Databases,Databases
+Python,MLOps
+Java,APIs
+Python,APIs
+CSS,JavaScript
+TensorFlow,TensorFlow
+SQL,Power BI
+Power BI,Communication
+Machine Learning,MLOps
+SQL,APIs
+Communication,Communication
+Networking,AWS
+NLP,Deep Learning
+SQL,APIs
+SQL,Statistics
+HTML,HTML
+Communication,Power BI
+Data Visualization,Data Visualization
+AWS,AWS
+JavaScript,React
+SQL,Databases
+APIs,Databases
+Machine Learning,MLOps
+SQL,HTML
+Excel,Data Visualization
+Python,Transformers
+Statistics,Statistics
+Databases,APIs
+Docker,Docker
+Networking,SIEM
+Statistics,Excel
+React,HTML
+JavaScript,React
+SIEM,SIEM
+Cryptography,SIEM
+Statistics,Data Visualization
+Excel,Excel
+Machine Learning,Data Visualization
+Data Visualization,Data Visualization
+JavaScript,React
+React,CSS
+Statistics,Power BI
+Python,Java
+Excel,Excel
+SQL,APIs
+Python,Excel
+SQL,SQL
+Python,TensorFlow
+Linux,Kubernetes
+NLP,TensorFlow
+MLOps,MLOps
+SIEM,Cryptography
+Python,APIs
+Machine Learning,Statistics
+MLOps,MLOps
+Machine Learning,Transformers
+SQL,Communication
+Python,Transformers
+CSS,React
+Kubernetes,AWS
+SQL,Excel
+Python,APIs
+SQL,Data Visualization
+Python,Excel
+Python,Data Visualization
+Docker,Docker
+SQL,Java
+Power BI,Power BI
+NLP,Transformers
+Communication,Power BI
+Transformers,Transformers
+APIs,APIs
+Python,Statistics
+Linux,AWS
+TensorFlow,TensorFlow
+CSS,React
+Statistics,Power BI
+AWS,AWS
+Machine Learning,Deep Learning
+Kubernetes,AWS
+Excel,Excel
+Python,Deep Learning
+SQL,MLOps
+SQL,Data Visualization
+SQL,APIs
+Networking,Kubernetes
+APIs,APIs
+Data Visualization,Excel
+Data Visualization,Data Visualization
+Deep Learning,Deep Learning
+Kubernetes,Docker
+Deep Learning,Deep Learning
+Docker,Kubernetes
+Machine Learning,TensorFlow
+SQL,Statistics

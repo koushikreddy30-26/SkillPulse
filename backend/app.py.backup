@@ -1440,6 +1440,10 @@ def skillpulse_logout():
     return jsonify({"message": "Signed out."}), 200
 # ================= END AUTHENTICATION API =================
 
+@app.route("/")
+def home():
+    return "SkillPulse API is running"
+
 
 
 if __name__ == "__main__":

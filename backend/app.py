@@ -17,6 +17,34 @@ from career_skills import get_required_skills, get_career_goals
 
 from sklearn.metrics.pairwise import cosine_similarity
 
+def lookup_target_skill(topic, course_catalog=None):
+    """
+    Exact-match skill lookup.
+    Returns a skill only when the topic matches a known skill.
+    """
+    if topic is None:
+        return None
+
+    topic = str(topic).strip().casefold()
+    if not topic:
+        return None
+
+    # Use known target skills from the trained classifier.
+    if course_catalog is not None and not course_catalog.empty:
+        for column in ("topic", "target_skill"):
+            if column in course_catalog.columns:
+                skills = (
+                    course_catalog[column]
+                    .dropna()
+                    .astype(str)
+                    .str.strip()
+                )
+                matches = skills[skills.str.casefold() == topic]
+                if not matches.empty:
+                    return matches.iloc[0]
+
+    return None
+
 
 
 from database import (
@@ -67,6 +95,9 @@ rec_tfidf = joblib.load(os.path.join(MODEL_DIR, "rec_tfidf.pkl"))
 
 rec_vectors = joblib.load(os.path.join(MODEL_DIR, "rec_vectors.pkl"))
 
+learning_goal_model = joblib.load(
+    os.path.join(BASE_DIR, "learning_goal_classifier.pkl")
+)
 
 
 print("Backend models loaded.")
@@ -294,6 +325,48 @@ def predict_skill():
 
     }), 200
 
+
+# --------------------------------------------------
+# Predict target skill from learning goal
+# --------------------------------------------------
+
+@app.route("/api/predict-from-learning-goal", methods=["POST"])
+def predict_from_learning_goal():
+    data = request.get_json(silent=True) or {}
+
+    learning_goal = str(
+        data.get("learning_goal", "")
+    ).strip()
+
+    if not learning_goal:
+        return jsonify({
+            "error": "Please provide a learning_goal."
+        }), 400
+
+    try:
+        prediction = learning_goal_model.predict(
+            [learning_goal]
+        )[0]
+
+        return jsonify({
+            "learning_goal": learning_goal,
+            "predicted_target_skill": str(prediction),
+            "method": "learning_goal_text_classification",
+            "note": (
+                "The learning-goal text may already contain "
+                "the target skill. The test accuracy does not "
+                "establish generalization to unknown skills."
+            )
+        }), 200
+
+    except Exception:
+        app.logger.exception(
+            "Learning-goal prediction failed"
+        )
+
+        return jsonify({
+            "error": "Learning-goal prediction failed."
+        }), 500
 
 
 
